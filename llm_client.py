@@ -22,7 +22,7 @@ class HelloAgentsLLM:
         self.model: str = resolved_model
         self.client = OpenAI(api_key=resolved_api_key, base_url=resolved_base_url, timeout=resolved_timeout)
 
-    def think(self, messages: Iterable[ChatCompletionMessageParam], temperature: float = 0.2) -> Optional[str]:
+    def think(self, messages: Iterable[ChatCompletionMessageParam], temperature: float = 0) -> Optional[str]:
         # 调用大语言模型进行思考，并返回响应。
         print(f"正在调用 {self.model} 模型。。。")
         try:
