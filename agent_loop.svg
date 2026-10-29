@@ -1,0 +1,79 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 1010" width="1200" height="1010" font-family="'Microsoft YaHei','PingFang SC','Segoe UI',sans-serif">
+  <defs>
+    <marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#5b8def"/>
+    </marker>
+    <marker id="ah-o" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#e8833a"/>
+    </marker>
+    <marker id="ah-g" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#4ec27a"/>
+    </marker>
+  </defs>
+
+  <rect width="1200" height="1010" fill="#0f1115"/>
+
+  <!-- ① 用户提问 -->
+  <rect x="420" y="48" width="360" height="92" rx="14" fill="#1b2333" stroke="#5b8def" stroke-width="2"/>
+  <text x="600" y="84" fill="#eef2fa" font-size="21" font-weight="700" text-anchor="middle">① 用户提问</text>
+  <text x="600" y="114" fill="#9aa6bd" font-size="16" text-anchor="middle">agent.run(question)</text>
+
+  <line x1="600" y1="140" x2="600" y2="176" stroke="#5b8def" stroke-width="2" marker-end="url(#ah)"/>
+
+  <!-- ② LLM 推理 -->
+  <rect x="352" y="180" width="496" height="126" rx="14" fill="#1b2333" stroke="#5b8def" stroke-width="2"/>
+  <text x="600" y="216" fill="#eef2fa" font-size="21" font-weight="700" text-anchor="middle">② LLM 推理（Thought + Action）</text>
+  <text x="600" y="246" fill="#9aa6bd" font-size="16" text-anchor="middle">REACT_PROMPT_TEMPLATE.format(tools / question / history</text>
+  <text x="600" y="270" fill="#9aa6bd" font-size="16" text-anchor="middle">/ current_date) → llm_client.think(messages)</text>
+  <text x="600" y="294" fill="#6f7d99" font-size="15" text-anchor="middle">提示词里注入当前日期，避免模型凭旧知识猜“最新型号”</text>
+
+  <line x1="600" y1="306" x2="600" y2="342" stroke="#5b8def" stroke-width="2" marker-end="url(#ah)"/>
+
+  <!-- ③ 解析 Action -->
+  <rect x="420" y="346" width="360" height="96" rx="14" fill="#2a2416" stroke="#e5c07b" stroke-width="2"/>
+  <text x="600" y="382" fill="#f5e6bf" font-size="21" font-weight="700" text-anchor="middle">③ 解析输出</text>
+  <text x="600" y="412" fill="#bda77a" font-size="16" text-anchor="middle">_parse_output() → Thought / Action</text>
+
+  <!-- 分支 -->
+  <line x1="600" y1="442" x2="600" y2="470" stroke="#6f7d99" stroke-width="2"/>
+  <line x1="340" y1="470" x2="880" y2="470" stroke="#6f7d99" stroke-width="2"/>
+  <line x1="340" y1="470" x2="340" y2="512" stroke="#e8833a" stroke-width="2" marker-end="url(#ah-o)"/>
+  <line x1="880" y1="470" x2="880" y2="512" stroke="#4ec27a" stroke-width="2" marker-end="url(#ah-g)"/>
+  <text x="330" y="498" fill="#e8833a" font-size="16" text-anchor="end">Action = 调用工具</text>
+  <text x="896" y="498" fill="#4ec27a" font-size="16">Action = Finish</text>
+
+  <!-- ④ 工具执行 -->
+  <rect x="140" y="516" width="400" height="150" rx="14" fill="#2a1d13" stroke="#e8833a" stroke-width="2"/>
+  <text x="340" y="552" fill="#ffd9b8" font-size="21" font-weight="700" text-anchor="middle">④ Function Call 执行工具</text>
+  <text x="340" y="582" fill="#c79a72" font-size="16" text-anchor="middle">_parse_action() → 工具名[入参]</text>
+  <text x="340" y="606" fill="#c79a72" font-size="16" text-anchor="middle">tool_executor.getTool(name)(input)</text>
+  <text x="340" y="638" fill="#8d7358" font-size="15" text-anchor="middle">例：Search[查询词] → Serper 搜索 → Observation</text>
+
+  <!-- ⑤ Finish -->
+  <rect x="700" y="516" width="360" height="150" rx="14" fill="#13271b" stroke="#4ec27a" stroke-width="2"/>
+  <text x="880" y="552" fill="#c8f3d8" font-size="21" font-weight="700" text-anchor="middle">⑤ Finish[最终答案]</text>
+  <text x="880" y="584" fill="#84c99b" font-size="16" text-anchor="middle">return final_answer</text>
+  <text x="880" y="610" fill="#84c99b" font-size="16" text-anchor="middle">任务结束，跳出循环</text>
+
+  <line x1="340" y1="666" x2="340" y2="706" stroke="#e8833a" stroke-width="2" marker-end="url(#ah-o)"/>
+
+  <!-- ⑥ 回填历史 -->
+  <rect x="140" y="710" width="400" height="112" rx="14" fill="#171b22" stroke="#8b98ad" stroke-width="2"/>
+  <text x="340" y="746" fill="#e6ebf5" font-size="21" font-weight="700" text-anchor="middle">⑥ 回填对话历史</text>
+  <text x="340" y="776" fill="#9aa6bd" font-size="16" text-anchor="middle">history.append(Action) / append(Observation)</text>
+  <text x="340" y="800" fill="#6f7d99" font-size="15" text-anchor="middle">下一轮拼进提示词，LLM 据此继续思考</text>
+
+  <!-- 循环回 ② -->
+  <path d="M540 766 H1096 V243 H852" fill="none" stroke="#5b8def" stroke-width="2" marker-end="url(#ah)"/>
+  <text x="1096" y="792" fill="#9aa6bd" font-size="16" text-anchor="end">循环继续推理</text>
+  <text x="1096" y="816" fill="#6f7d99" font-size="15" text-anchor="end">最多 max_steps 轮（默认 5）</text>
+
+  <!-- 终止条件 -->
+  <rect x="700" y="866" width="360" height="76" rx="14" fill="#171b22" stroke="#6f7d99" stroke-width="2" stroke-dasharray="6 5"/>
+  <text x="880" y="898" fill="#9aa6bd" font-size="17" font-weight="700" text-anchor="middle">达到 max_steps 未 Finish</text>
+  <text x="880" y="924" fill="#6f7d99" font-size="15" text-anchor="middle">打印提示并 return None</text>
+  <line x1="1096" y1="828" x2="1096" y2="880" stroke="#6f7d99" stroke-width="2" stroke-dasharray="6 5" marker-end="url(#ah)"/>
+  <path d="M1096 880 H1060" fill="none" stroke="#6f7d99" stroke-width="2" stroke-dasharray="6 5"/>
+
+  <text x="600" y="984" fill="#8b98ad" font-size="18" text-anchor="middle">示意：ReAct“思考 → 行动 → 观察”循环（对应 ReAct.py 的 run()）</text>
+</svg>
